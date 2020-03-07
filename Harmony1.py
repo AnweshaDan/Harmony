@@ -18,20 +18,15 @@ root = Tk()
 
 mixer.init()  
 
+# initializing root window characteristics
 root.geometry('400x300')
-root.title("Harmony")#later
+root.title("Harmony")
 
-lengthlabel=Label(root,text="Total length- 00:00")
-lengthlabel.pack(pady=10)
-
-def show_length():
-    a=mixer.Sound(filename_path)
-    length=a.get_length()
-
+#creating a statusbar to show muxic being played
 statusbar=Label(root,text='Welcome!',relief=SUNKEN,anchor=W)
 statusbar.pack(side=BOTTOM,fill=X)
 
-
+# creating frames for better organization for widgets
 leftframe=Frame(root)
 leftframe.pack(side=LEFT,padx=30)
 
@@ -40,20 +35,41 @@ rightframe.pack()
 
 topframe=Frame(rightframe)
 topframe.pack()
+
 middleframe=Frame(rightframe)
 middleframe.pack(pady=10)
+
 bottomframe1=Frame(rightframe)
 bottomframe1.pack()
+
 bottomframe2=Frame(rightframe)
 bottomframe2.pack()
 
+# creating a menubar for some basic functionality
 menubar=Menu(root)
 root.config(menu=menubar)
-
 submenu=Menu(menubar,tearoff=0)
+#creating basic submenus of File menu
+menubar.add_cascade(label='File',menu=submenu)
+submenu.add_command(label='Open',command=browse_files)
+submenu.add_command(label='Exit',command=exit_window)
+#creating submenus for Help menu
+submenu=Menu(menubar,tearoff=0)
+menubar.add_cascade(label='Help',menu=submenu)
+submenu.add_command(label='About us',command=about_us)
+#messagebox for About Us submenu
+def about_us():
+    tkinter.messagebox.showinfo('About us','Listen to your favourite music whenever you want.')
 
-plist=[]
+# Label to display info
+text = Label(topframe, text='Lets make some noise!')
+text.pack(pady=10)
 
+
+
+plist=[]# list to store path of music files
+
+# function to browse files to be added
 def browse_files():
     global f
     global filename_path
@@ -61,6 +77,7 @@ def browse_files():
     f=os.path.basename(filename_path)
     add_to_playlist()
     
+#function to add music to playlist
 def add_to_playlist():
     index=0
     playlist.insert(index,f)
@@ -68,52 +85,33 @@ def add_to_playlist():
     index+=1
     print(plist)
     
-def exit_window():#new
-    stop_music()#new
-    root.destroy()#new
-
- 
-    
-menubar.add_cascade(label='File',menu=submenu)
-submenu.add_command(label='Open',command=browse_files)
-submenu.add_command(label='Exit',command=exit_window)#new
-
-root.protocol('WM_DELETE_WINDOW',exit_window)  # root is your root window
-
-
-    
-def about_us():
-    tkinter.messagebox.showinfo('About us','Listen to your favourite music whenever you want.')
-
-submenu=Menu(menubar,tearoff=0)
-menubar.add_cascade(label='Help',menu=submenu)
-submenu.add_command(label='About us',command=about_us)
-
-playlist=Listbox(leftframe
-                 )#new
-playlist.pack()
-
-addbtn=Button(leftframe,text="Add.",command=browse_files)
-addbtn.pack(side=LEFT)
-
+#function to remove songs from playlist
 def del_song():
     selected_song=playlist.curselection()
     selected_song=selected_song[0]
     playlist.delete(selected_song)
     plist.pop(selected_song)
     print(plist)
-
+    
+# buttons to add/remove from playlist
+addbtn=Button(leftframe,text="Add.",command=browse_files)
+addbtn.pack(side=LEFT)
 rmvbtn=Button(leftframe,text="Remove.",command=del_song)
 rmvbtn.pack(side=LEFT)
 
+#function to exit window
+def exit_window():
+    stop_music()
+    root.destroy()
+#overriding the functionality of cross button of window
+root.protocol('WM_DELETE_WINDOW',exit_window) 
 
-text = Label(topframe, text='Lets make some noise!')
-text.pack(pady=10)
 
+#creating a listbox for holding playlist
+playlist=Listbox(leftframe)#new
+playlist.pack()
 
-
-
-    
+#function to start/pause/stop music
 def stop_music():
     global paused
     paused = False#new
@@ -152,6 +150,7 @@ def play_music():
                 statusbar['text']="Playing "+ os.path.basename(play_it)
             except: 
                 tkinter.messagebox.showerror('Error','No selected songs in the playlist')
+                
 def shuffle_music():
     random.shuffle(plist)
     print(plist)
@@ -162,18 +161,17 @@ def shuffle_music():
         mixer.music.play()
         statusbar['text']="Playing "+ os.path.basename(play_it)
         
-        
-    
-
+# function to control volume
 def set_vol(val):
     volume= int(val)/100
     mixer.music.set_volume(volume)
+#setiing default volume
+scale=Scale(bottomframe2,from_=0,to=100,orient=HORIZONTAL,command=set_vol)
+scale.set(70)
+mixer.music.set_volume(0.7)
+scale.pack(pady=10)
     
-
-    
-    
-
-
+#creating all the buttons
 playPhoto = PhotoImage(file='touch.png')
 playBtn = Button(middleframe, image=playPhoto, command=play_music)
 playBtn.pack(side=LEFT,padx=10)
@@ -193,14 +191,5 @@ shuffleBtn.pack(side=LEFT,padx=10)#new
 repeatPhoto = PhotoImage(file='repeat.png')
 repeatBtn = Button(bottomframe1, image=repeatPhoto)
 repeatBtn.pack(padx=10)
-
-scale=Scale(bottomframe2,from_=0,to=100,orient=HORIZONTAL,command=set_vol)
-scale.set(70)
-mixer.music.set_volume(0.7)
-scale.pack(pady=10)
-
-#progress=Scale(bottomframe,from_=0,to=100,orient=HORIZONTAL,command=set_progress)
-#mixer.music.set_progress(0.7)
-#scale.pack(pady=10)
 
 root.mainloop()
