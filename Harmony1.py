@@ -19,7 +19,7 @@ root = Tk()
 mixer.init()  
 
 # initializing root window characteristics
-root.geometry('400x300')
+root.geometry('500x300')
 root.title("Harmony")
 
 #creating a statusbar to show muxic being played
@@ -45,6 +45,25 @@ bottomframe1.pack()
 bottomframe2=Frame(rightframe)
 bottomframe2.pack()
 
+# function to browse files to be added
+def browse_files():
+    global f
+    global filename_path
+    filename_path=filedialog.askopenfilename()
+    f=os.path.basename(filename_path)
+    add_to_playlist()
+    
+#function to exit window
+def exit_window():
+    stop_music()
+    root.destroy()
+#overriding the functionality of cross button of window
+root.protocol('WM_DELETE_WINDOW',exit_window) 
+
+#messagebox for About Us submenu
+def about_us():
+    tkinter.messagebox.showinfo('About us','Listen to your favourite music whenever you want.')
+
 # creating a menubar for some basic functionality
 menubar=Menu(root)
 root.config(menu=menubar)
@@ -57,9 +76,7 @@ submenu.add_command(label='Exit',command=exit_window)
 submenu=Menu(menubar,tearoff=0)
 menubar.add_cascade(label='Help',menu=submenu)
 submenu.add_command(label='About us',command=about_us)
-#messagebox for About Us submenu
-def about_us():
-    tkinter.messagebox.showinfo('About us','Listen to your favourite music whenever you want.')
+
 
 # Label to display info
 text = Label(topframe, text='Lets make some noise!')
@@ -69,13 +86,7 @@ text.pack(pady=10)
 
 plist=[]# list to store path of music files
 
-# function to browse files to be added
-def browse_files():
-    global f
-    global filename_path
-    filename_path=filedialog.askopenfilename()
-    f=os.path.basename(filename_path)
-    add_to_playlist()
+
     
 #function to add music to playlist
 def add_to_playlist():
@@ -99,12 +110,6 @@ addbtn.pack(side=LEFT)
 rmvbtn=Button(leftframe,text="Remove.",command=del_song)
 rmvbtn.pack(side=LEFT)
 
-#function to exit window
-def exit_window():
-    stop_music()
-    root.destroy()
-#overriding the functionality of cross button of window
-root.protocol('WM_DELETE_WINDOW',exit_window) 
 
 
 #creating a listbox for holding playlist
