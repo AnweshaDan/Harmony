@@ -89,12 +89,17 @@ plist=[]# list to store path of music files
 
     
 #function to add music to playlist
+count=0#to keep track of no. of songs
 def add_to_playlist():
-    index=0
+    global count
+    index=0#to insert at the topmost part of playlist
     playlist.insert(index,f)
     plist.insert(index,filename_path)
     index+=1
+    count+=1
     print(plist)
+    print(index)
+    print(count)
     
 #function to remove songs from playlist
 def del_song():
@@ -113,17 +118,18 @@ rmvbtn.pack(side=LEFT)
 
 
 #creating a listbox for holding playlist
-playlist=Listbox(leftframe)#new
+playlist=Listbox(leftframe)
 playlist.pack()
 
 #function to start/pause/stop music
 def stop_music():
     global paused
-    paused = False#new
+    paused = False
     mixer.music.stop()
     statusbar['text']="Music stopped."
     
 paused=False
+shuffled= False
 def pause_music():
     global paused
     
@@ -133,6 +139,7 @@ def pause_music():
     
 def play_music():
     global paused
+    global shuffled
     if paused:
         mixer.music.unpause()
         statusbar['text']="Music resumed."
@@ -148,7 +155,7 @@ def play_music():
         finally:
             try:
                 print(selected_song)
-            
+                print(len(plist))
                 play_it=plist[selected_song]
                 mixer.music.load(play_it)
                 mixer.music.play()
@@ -159,13 +166,12 @@ def play_music():
 def shuffle_music():
     random.shuffle(plist)
     print(plist)
-    for i in plist:
-        #playlist.select_set(i)
-        play_it=i
-        mixer.music.load(play_it)
-        mixer.music.play()
-        statusbar['text']="Playing "+ os.path.basename(play_it)
+    play_music()
+    
         
+
+    
+                   
 # function to control volume
 def set_vol(val):
     volume= int(val)/100
