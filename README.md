@@ -1,5 +1,6 @@
 # Harmony
 A music player which allows user to create a playlist of songs saved on their local device and listen to it. You may choose to select the song you want to play or you may choose to shuffle play.
+#### Screenshot link : https://user-images.githubusercontent.com/55195169/76166400-4639ec80-6184-11ea-8e3f-10f2965a0269.png
 
 
 # Getting started
