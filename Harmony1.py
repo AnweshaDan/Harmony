@@ -168,10 +168,6 @@ def shuffle_music():
     print(plist)
     play_music()
     
-        
-
-    
-                   
 # function to control volume
 def set_vol(val):
     volume= int(val)/100
@@ -195,12 +191,9 @@ pausePhoto = PhotoImage(file='pause.png')
 pauseBtn = Button(middleframe, image=pausePhoto, command=pause_music)
 pauseBtn.pack(padx=10)
 
-shufflePhoto = PhotoImage(file='shuffle.png')#new
+shufflePhoto = PhotoImage(file='shuffle.png')
 shuffleBtn = Button(bottomframe1, image=shufflePhoto,command=shuffle_music)
-shuffleBtn.pack(side=LEFT,padx=10)#new
+shuffleBtn.pack(side=LEFT,padx=10)
 
-repeatPhoto = PhotoImage(file='repeat.png')
-repeatBtn = Button(bottomframe1, image=repeatPhoto)
-repeatBtn.pack(padx=10)
 
 root.mainloop()
